@@ -1,8 +1,12 @@
-#include <iostream>
+#include "sfmlTest.cpp"
+#include "window.cpp"
+
 
 int main(){
 
-	std::cout << "Test Main!\n";
+	// sfmlTestWindow();
 
+	Window main;
+	main.run();
 	return 0;
 }
