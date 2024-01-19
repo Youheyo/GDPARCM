@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(GDPARCM)
+project(GDPARCM LANGUAGES CXX)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
@@ -10,9 +10,14 @@ FetchContent_Declare(SFML
     GIT_TAG 2.6.1)
 FetchContent_MakeAvailable(SFML)
 
-add_executable(GDPARCM main.cpp)
-target_include_directories(GDPARCM PRIVATE ${PROJECT_SOURCE_DIR})
-target_link_libraries(GDPARCM PRIVATE sfml-graphics sfml-window sfml-system)
+file(GLOB SOURCES "source/*.cpp")
+
+add_executable(
+    GDPARCM 
+    ${SOURCES}
+    )
+target_include_directories(GDPARCM PRIVATE ${PROJECT_SOURCE_DIR} )
+target_link_libraries(GDPARCM PRIVATE sfml-graphics sfml-window sfml-system )
 target_compile_features(GDPARCM PRIVATE cxx_std_20)
 
 if(WIN32)
