@@ -4,6 +4,7 @@
 #include "TextureManager.h"
 #include "StringUtils.h"
 #include "IETThread.h"
+#include <string>
 
 //a singleton class
 TextureManager* TextureManager::sharedInstance = NULL;
@@ -35,6 +36,19 @@ void TextureManager::loadFromAssetList()
 		this->instantiateAsTexture(path, assetName, false);
 		std::cout << "[TextureManager] Loaded texture: " << assetName << std::endl;
 	}
+
+	for(int i = 0; i < streamingAssetCount; i++){
+
+		if(i >= 100) {
+			this->instantiateAsTexture(STREAMING_PATH + "tile" + std::to_string(i) + ".png", "tile"+std::to_string(i), true);
+		}
+		else if(i >= 10 && i < 100){
+			this->instantiateAsTexture(STREAMING_PATH + "tile0" + std::to_string(i) + ".png", "tile"+std::to_string(i), true);
+		}
+		else{
+			this->instantiateAsTexture(STREAMING_PATH + "tile00" + std::to_string(i) + ".png", "tile"+std::to_string(i), true);
+		}
+	}
 }
 
 void TextureManager::loadSingleStreamAsset(int index)
@@ -50,7 +64,6 @@ void TextureManager::loadSingleStreamAsset(int index)
 			
 			//<code here for loading asset>
 			String assetName = "";
-	
 			std::cout << "[TextureManager] Loaded streaming texture: " << assetName << std::endl;
 			break;
 		}
@@ -83,6 +96,7 @@ int TextureManager::getNumFrames(const String assetName)
 
 sf::Texture* TextureManager::getStreamTextureFromList(const int index)
 {
+	std::cout << "[TextureManager] Retrieved " << index << std::endl;
 	return this->streamTextureList[index];
 }
 

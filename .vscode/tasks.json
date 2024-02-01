@@ -1,6 +1,20 @@
 {
     "tasks": [
         {
+            "label": "build",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--build",
+                "${workspaceFolder}/build"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        
+        {
             "type": "cppbuild",
             "label": "C/C++: g++.exe build active file",
             "command": "C:\\ProgramData\\mingw64\\mingw64\\bin\\g++.exe",

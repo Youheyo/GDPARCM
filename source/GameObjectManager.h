@@ -7,6 +7,7 @@
 #include <string>
 #include "AGameObject.h"
 #include <SFML/Graphics.hpp>
+#include "IconObject.h"
 
 typedef std::unordered_map<std::string, AGameObject*> HashTable;
 typedef std::vector<AGameObject*> List;
@@ -28,7 +29,7 @@ class GameObjectManager
 	private:
 		GameObjectManager() {};
 		GameObjectManager(GameObjectManager const&) {};             // copy constructor is private
-		GameObjectManager& operator=(GameObjectManager const&) {};  // assignment operator is private
+		GameObjectManager& operator=(GameObjectManager const&) { };  // assignment operator is private
 		static GameObjectManager* sharedInstance;
 
 		HashTable gameObjectMap;
