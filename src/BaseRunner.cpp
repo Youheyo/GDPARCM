@@ -2,7 +2,6 @@
 #include  "GameObjectManager.h"
 #include "BGObject.h"
 #include "TextureManager.h"
-#include "TextureDisplay.h"
 #include "FPSCounter.h"
 #include "IconSpawner.h"
 #include "IconObject.h"
@@ -20,9 +19,6 @@ BaseRunner::BaseRunner() :
 	//load objects
 	BGObject* bgObject = new BGObject("BGObject");
 	GameObjectManager::getInstance()->addObject(bgObject);
-
-	TextureDisplay* display = new TextureDisplay();
-	GameObjectManager::getInstance()->addObject(display);
 
 	FPSCounter* fpsCounter = new FPSCounter();
 	GameObjectManager::getInstance()->addObject(fpsCounter);

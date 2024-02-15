@@ -10,9 +10,16 @@ public:
 	void processInput(sf::Event event);
 	void update(sf::Time deltaTime);
 
+	void spawnIcons();
 
 private:
+
+	std::vector<IconObject*> IconList;
+
 	int progress = 0;
+
+	float stream_delay = 0.01f;
+
 	int iconAmt = 480;
 	float xOffset = 64;
 	float yOffset = 64;

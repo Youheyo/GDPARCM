@@ -13,7 +13,7 @@ FetchContent_Declare(SFML
     GIT_TAG 2.6.1)
 FetchContent_MakeAvailable(SFML)
 
-file(GLOB SOURCES "source/*.cpp")
+file(GLOB SOURCES "src/*.cpp")
 
 add_executable(
     GDPARCM 
