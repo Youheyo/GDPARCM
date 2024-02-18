@@ -1,18 +1,30 @@
 #pragma once
 
 #include "IETThread.h"
-class IconLoader :    public IETThread
+#include "IExecutionEvent.h"
+#include "IWorkerAction.h"
+
+class IconLoader :    public IETThread, public IWorkerAction
 {
 private:
 	typedef std::string String;
 public:
 	IconLoader(String path);
+	IconLoader(String path, IExecutionEvent* event);
 	~IconLoader();
+	void setPath(String path);
+	void onStartTask() override;
+
+	bool isRunning = false;
 
 private:
 	void run() override;
 
 	String path;
 
+	IExecutionEvent* event;
+
+	std::counting_semaphore<10>* semaphore;
+	std::counting_semaphore<10>* signal;
 };
 

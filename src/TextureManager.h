@@ -1,6 +1,7 @@
 #pragma once
 #include <unordered_map>
 #include "SFML/Graphics.hpp"
+#include "IconSpawner.h"
 
 class TextureManager
 {
@@ -13,6 +14,7 @@ public:
 	static TextureManager* getInstance();
 	void loadFromAssetList(); //loading of all assets needed for startup
 	void loadSingleStreamAsset(int index); //loads a single streaming asset based on index in directory
+	void loadMultipleStreamAssets(int threads, IconSpawner* spwn);
 	sf::Texture* getFromTextureMap(const String assetName, int frameIndex);
 	int getNumFrames(const String assetName);
 
@@ -34,5 +36,6 @@ private:
 	int streamingAssetCount = 0;
 
 	void countStreamingAssets();
+
 
 };

@@ -3,6 +3,7 @@
 #include "TextureManager.h"
 #include "BaseRunner.h"
 #include <iostream>
+#include "IExecutionEvent.h"
 
 IconSpawner::IconSpawner() : AGameObject("IconSpawner") {
     
@@ -28,8 +29,13 @@ void IconSpawner::processInput(sf::Event event)
 
 void IconSpawner::update(sf::Time deltaTime) {
 
-    TextureManager::getInstance()->loadSingleStreamAsset(this->progress);
-    this->progress++;
+    // TextureManager::getInstance()->loadSingleStreamAsset(this->progress);
+    // this->progress++;
+    if(batch){
+        TextureManager::getInstance()->loadMultipleStreamAssets(10, this);
+        batch = false;
+    }
+
 
 }
 void IconSpawner::spawnIcons()
@@ -48,4 +54,9 @@ void IconSpawner::spawnIcons()
 
     GameObjectManager::getInstance()->addObject(icon);
 
+}
+
+void IconSpawner::onFinishedExecution()
+{
+    spawnIcons();
 }

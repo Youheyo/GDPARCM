@@ -5,19 +5,37 @@
 #include "IconSpawner.h"
 #include "TextureManager.h"
 #include "StringUtils.h"
+#include "IExecutionEvent.h"
 
 IconLoader::IconLoader(String path)
 {
 	this->path = path;
 }
 
+IconLoader::IconLoader(String path, IExecutionEvent* event)
+{
+	this->path = path;
+	this->event = event;
+}
+
 IconLoader::~IconLoader()
 {
+}
 
+void IconLoader::setPath(String path)
+{
+	this->path = path;
+}
+
+void IconLoader::onStartTask()
+{
+	this->run();
 }
 
 void IconLoader::run()
 {
+
+	// IETThread::sleep(500);
 
 	std::vector<String> tokens = StringUtils::split(path, '/');
 	String assetName = StringUtils::split(tokens[tokens.size() - 1], '.')[0];
@@ -26,10 +44,8 @@ void IconLoader::run()
 
 	std::cout << "[TextureManager] Loaded streaming texture: " << assetName << std::endl;
 
-	GameObjectManager* manager = GameObjectManager::getInstance();
-	IconSpawner* spwn = (IconSpawner*)manager->findObjectByName("IconSpawner");
-
-	spwn->spawnIcons();
+	this->event->onFinishedExecution();
 
 	delete this;
+
 }

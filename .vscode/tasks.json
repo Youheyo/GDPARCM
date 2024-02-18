@@ -1,41 +1,15 @@
 {
     "tasks": [
         {
-            "label": "build",
-            "type": "shell",
-            "command": "cmake",
-            "args": [
-                "--build",
-                "${workspaceFolder}/build"
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
-        },
-        
-        {
             "type": "cppbuild",
             "label": "C/C++: g++.exe build active file",
-            "command": "C:\\ProgramData\\mingw64\\mingw64\\bin\\g++.exe",
+            "command": "C:\\ProgramData\\mingw64\\bin\\g++.exe",
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",
-                "${workspaceFolder}/*.cpp",
+                "main.cpp",
                 "-o",
-                "${fileDirname}\\$GDPARCM.exe",
-                "-I",
-                "${workspaceFolder}/SFML-2.6.1/include",
-                "-L",
-                "${workspaceFolder}/SFML-2.6.1/lib",
-                "-lsfml-graphics-s-d.lib",
-                "-lsfml-window-s-d.lib",
-                "-lsfml-system-s-d.lib",
-                "-lopengl32.lib",
-                "-lwinmm.lib",
-                "-lgdi32.lib",
-                "-lfreetype.lib"
-
+                "${fileDirname}\\${fileBasenameNoExtension}.exe"
             ],
             "options": {
                 "cwd": "${fileDirname}"

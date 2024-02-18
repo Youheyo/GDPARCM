@@ -6,6 +6,8 @@
 #include "IETThread.h"
 #include <string>
 #include "IconLoader.h"
+#include "BaseRunner.h"
+#include "ThreadPool.h"
 
 //a singleton class
 TextureManager* TextureManager::sharedInstance = NULL;
@@ -42,7 +44,7 @@ void TextureManager::loadFromAssetList()
 
 void TextureManager::loadSingleStreamAsset(int index)
 {
-	int fileNum = 0;
+	int fileNum = 0;	
 	
 	for (const auto& entry : std::filesystem::directory_iterator(STREAMING_PATH)) {
 		if(index == fileNum)
@@ -57,6 +59,24 @@ void TextureManager::loadSingleStreamAsset(int index)
 		}
 
 		fileNum++;
+	}
+}
+
+void TextureManager::loadMultipleStreamAssets(int nThreads, IconSpawner* spwn)
+{
+
+	ThreadPool* pool = new ThreadPool("BatchPool", nThreads);
+	pool->startScheduler();
+
+	for (const auto& entry : std::filesystem::directory_iterator(STREAMING_PATH)){
+
+
+		String path = entry.path().generic_string();
+
+		IconLoader* il = new IconLoader(path, spwn);
+		pool->scheduleTask(il);
+
+		
 	}
 }
 
