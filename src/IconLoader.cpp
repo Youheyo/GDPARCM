@@ -27,6 +27,11 @@ void IconLoader::setPath(String path)
 	this->path = path;
 }
 
+void IconLoader::setStreaming(bool stream)
+{
+	this->isStreaming = stream;
+}
+
 void IconLoader::onStartTask()
 {
 	this->run();
@@ -40,7 +45,7 @@ void IconLoader::run()
 	std::vector<String> tokens = StringUtils::split(path, '/');
 	String assetName = StringUtils::split(tokens[tokens.size() - 1], '.')[0];
 
-	TextureManager::getInstance()->instantiateAsTexture(path, assetName, true);
+	TextureManager::getInstance()->instantiateAsTexture(path, assetName, isStreaming);
 
 	std::cout << "[TextureManager] Loaded streaming texture: " << assetName << std::endl;
 

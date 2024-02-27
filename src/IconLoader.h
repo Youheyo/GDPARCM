@@ -13,6 +13,7 @@ public:
 	IconLoader(String path, IExecutionEvent* event);
 	~IconLoader();
 	void setPath(String path);
+	void setStreaming(bool stream);
 	void onStartTask() override;
 
 	bool isRunning = false;
@@ -21,6 +22,8 @@ private:
 	void run() override;
 
 	String path;
+
+	bool isStreaming = true;
 
 	IExecutionEvent* event;
 

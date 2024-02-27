@@ -23,6 +23,8 @@ target_include_directories(GDPARCM PRIVATE ${PROJECT_SOURCE_DIR} )
 target_link_libraries(GDPARCM PRIVATE sfml-graphics sfml-window sfml-system )
 target_compile_features(GDPARCM PRIVATE cxx_std_20)
 
+file(COPY ${CMAKE_SOURCE_DIR}/Media DESTINATION ${CMAKE_BINARY_DIR}/bin)
+
 if(WIN32)
     set_target_properties(GDPARCM PROPERTIES WIN32_EXECUTABLE TRUE)
 

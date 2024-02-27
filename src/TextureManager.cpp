@@ -24,6 +24,8 @@ TextureManager* TextureManager::getInstance() {
 TextureManager::TextureManager()
 {
 	this->countStreamingAssets();
+	this->pool = new ThreadPool("TexPool", 5);
+	this->pool->startScheduler();
 }
 
 void TextureManager::loadFromAssetList()
@@ -62,11 +64,8 @@ void TextureManager::loadSingleStreamAsset(int index)
 	}
 }
 
-void TextureManager::loadMultipleStreamAssets(int nThreads, IconSpawner* spwn)
+void TextureManager::loadMultipleStreamAssets(IExecutionEvent* spwn)
 {
-
-	ThreadPool* pool = new ThreadPool("BatchPool", nThreads);
-	pool->startScheduler();
 
 	for (const auto& entry : std::filesystem::directory_iterator(STREAMING_PATH)){
 
@@ -74,8 +73,21 @@ void TextureManager::loadMultipleStreamAssets(int nThreads, IconSpawner* spwn)
 		String path = entry.path().generic_string();
 
 		IconLoader* il = new IconLoader(path, spwn);
-		pool->scheduleTask(il);
+		this->pool->scheduleTask(il);
 
+		
+	}
+}
+
+void TextureManager::loadAssetsFromDirectory(IExecutionEvent* event)
+{
+
+	for (const auto& entry : std::filesystem::directory_iterator(DATA_PATH)){
+
+		String path = entry.path().generic_string();
+
+		IconLoader* il = new IconLoader(path, event);
+		this->pool->scheduleTask(il);
 		
 	}
 }
@@ -89,6 +101,11 @@ sf::Texture* TextureManager::getFromTextureMap(const String assetName, int frame
 		std::cout << "[TextureManager] No texture found for " << assetName << std::endl;
 		return NULL;
 	}
+}
+
+sf::Texture *TextureManager::getBaseTextureFromList(const int index)
+{
+    return this->baseTextureList[index];
 }
 
 int TextureManager::getNumFrames(const String assetName)

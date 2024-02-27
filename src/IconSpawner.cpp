@@ -32,7 +32,7 @@ void IconSpawner::update(sf::Time deltaTime) {
     // TextureManager::getInstance()->loadSingleStreamAsset(this->progress);
     // this->progress++;
     if(batch){
-        TextureManager::getInstance()->loadMultipleStreamAssets(10, this);
+        TextureManager::getInstance()->loadMultipleStreamAssets(this);
         batch = false;
     }
 

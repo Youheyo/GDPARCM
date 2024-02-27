@@ -2,6 +2,7 @@
 #include <unordered_map>
 #include "SFML/Graphics.hpp"
 #include "IconSpawner.h"
+#include "ThreadPool.h"
 
 class TextureManager
 {
@@ -14,8 +15,10 @@ public:
 	static TextureManager* getInstance();
 	void loadFromAssetList(); //loading of all assets needed for startup
 	void loadSingleStreamAsset(int index); //loads a single streaming asset based on index in directory
-	void loadMultipleStreamAssets(int threads, IconSpawner* spwn);
+	void loadMultipleStreamAssets(IExecutionEvent* spwn);
+	void loadAssetsFromDirectory(IExecutionEvent* event);
 	sf::Texture* getFromTextureMap(const String assetName, int frameIndex);
+	sf::Texture* getBaseTextureFromList(const int index);
 	int getNumFrames(const String assetName);
 
 	sf::Texture* getStreamTextureFromList(const int index);
@@ -32,7 +35,11 @@ private:
 	TextureList baseTextureList;
 	TextureList streamTextureList;
 
+	ThreadPool* pool;
+
 	const std::string STREAMING_PATH = "Media/Streaming/";
+	const std::string DATA_PATH = "Media/artwork/";
+
 	int streamingAssetCount = 0;
 
 	void countStreamingAssets();
