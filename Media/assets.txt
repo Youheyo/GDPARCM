@@ -1,1 +1,3 @@
 Media/Textures/Desert.png
+Media/LoadingScreen/Fang.png
+Media/LoadingScreen/PawPrint.png

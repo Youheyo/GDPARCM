@@ -24,7 +24,5 @@ private:
 
 	IExecutionEvent* event;
 
-	std::counting_semaphore<10>* semaphore;
-	std::counting_semaphore<10>* signal;
 };
 
