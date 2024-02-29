@@ -23,6 +23,7 @@ public:
 
 	sf::Texture* getStreamTextureFromList(const int index);
 	int getNumLoadedStreamTextures() const;
+	int getNumTotalStreamTextures() const;
 	void instantiateAsTexture(String path, String assetName, bool isStreaming);
 
 private:

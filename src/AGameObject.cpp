@@ -55,6 +55,11 @@ sf::Vector2f AGameObject::getScale()
 	return this->sprite->getScale();
 }
 
+sf::Sprite* AGameObject::getSprite()
+{
+	return this->sprite;
+}
+
 sf::FloatRect AGameObject::getLocalBounds()
 {
 	return this->sprite->getLocalBounds();

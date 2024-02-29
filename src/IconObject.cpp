@@ -12,8 +12,8 @@ void IconObject::initialize()
 {
 	//assign texture
 	this->sprite = new sf::Sprite();
-	sf::Texture* texture = TextureManager::getInstance()->getStreamTextureFromList(this->textureIndex);
-	this->sprite->setTexture(*texture);
+	// sf::Texture* texture = TextureManager::getInstance()->getStreamTextureFromList(this->textureIndex);
+	// this->sprite->setTexture(*texture);
 }
 
 void IconObject::processInput(sf::Event event)

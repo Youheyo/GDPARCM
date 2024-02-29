@@ -6,6 +6,7 @@
 #include "IconSpawner.h"
 #include "IconObject.h"
 #include "ImageViewer.h"
+#include "LoadingScreen.h"
 
 /// <summary>
 /// This demonstrates a running parallax background where after X seconds, a batch of assets will be streamed and loaded.
@@ -25,7 +26,10 @@ BaseRunner::BaseRunner() :
 	// IconSpawner* iSpawn = new IconSpawner();
 	// GameObjectManager::getInstance()->addObject(iSpawn);
 
-	ImageViewer* viewer = new ImageViewer();
+	LoadingScreen* ls = new LoadingScreen(&loadingScreenFinished);
+	GameObjectManager::getInstance()->addObject(ls);
+
+	ImageViewer* viewer = new ImageViewer(&loadingScreenFinished);
 	GameObjectManager::getInstance()->addObject(viewer);
 
 	

@@ -2,8 +2,8 @@
 #include "TextureManager.h"
 #include "BaseRunner.h"
 
-ImageViewer::ImageViewer() : AGameObject("ImageViewer") {
-    
+ImageViewer::ImageViewer(bool *finishFlag) : AGameObject("ImageViewer") {
+    this->loadFinish = finishFlag;
 }
 
 ImageViewer::~ImageViewer() {
@@ -18,13 +18,18 @@ void ImageViewer::initialize() {
     this->sprite = new sf::Sprite();
 
     // this->setPosition(BaseRunner::WINDOW_WIDTH / 2, BaseRunner::WINDOW_HEIGHT / 2);
-    this->setPosition(0,0);
-	this->sprite->setTextureRect(sf::IntRect(0,0,BaseRunner::WINDOW_WIDTH, BaseRunner::WINDOW_HEIGHT)); 
+	
+    cropX = BaseRunner::WINDOW_WIDTH;
+    cropY = BaseRunner::WINDOW_HEIGHT;
+
+    this->sprite->setTextureRect(sf::IntRect(0,0,cropX, cropY)); 
 
 
 }
 
 void ImageViewer::processInput(sf::Event event) {
+
+    if(!loadFinish) return;
 
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
         index--;
@@ -61,9 +66,16 @@ void ImageViewer::processInput(sf::Event event) {
         this->setPosition(this->posX, posY + 1 * speed);
     }
 
-
-
-
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Z)){
+        cropX += 1 * speed;
+        cropY += 1 * speed;
+        this->sprite->setTextureRect(sf::IntRect(0, 0, cropX , cropY)); 
+    }
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::X)){
+        cropX -= 1 * speed;
+        cropY -= 1 * speed;
+        this->sprite->setTextureRect(sf::IntRect(0, 0, cropX, cropY)); 
+    }
 
 }
 
@@ -83,7 +95,15 @@ void ImageViewer::onFinishedExecution()
     
     this->ImgGallery.push_back(tl);
 
-    if(this->ImgGallery.size() - 1 == 0){
+
+    // if(this->ImgGallery.size() - 1 == 0){
+    //     this->sprite->setTexture(*this->ImgGallery[0]);
+    // }
+
+    // this->setScale(0.1f, 0.1f);
+    if(this->ImgGallery.size() >= TextureManager::getInstance()->getNumTotalStreamTextures()){
+        this->loadFinish = true;
         this->sprite->setTexture(*this->ImgGallery[0]);
+
     }
 }

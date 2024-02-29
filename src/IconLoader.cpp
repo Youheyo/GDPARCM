@@ -40,7 +40,7 @@ void IconLoader::onStartTask()
 void IconLoader::run()
 {
 
-	// IETThread::sleep(500);
+	IETThread::sleep(500);
 
 	std::vector<String> tokens = StringUtils::split(path, '/');
 	String assetName = StringUtils::split(tokens[tokens.size() - 1], '.')[0];
@@ -48,6 +48,8 @@ void IconLoader::run()
 	TextureManager::getInstance()->instantiateAsTexture(path, assetName, isStreaming);
 
 	std::cout << "[TextureManager] Loaded streaming texture: " << assetName << std::endl;
+
+	IETThread::sleep(500);
 
 	this->event->onFinishedExecution();
 

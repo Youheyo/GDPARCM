@@ -14,6 +14,8 @@ public:
 
 private:
 	
+	bool loadingScreenFinished;
+
 	sf::RenderWindow		window;
 
 	void render();

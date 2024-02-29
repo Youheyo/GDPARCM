@@ -24,7 +24,7 @@ TextureManager* TextureManager::getInstance() {
 TextureManager::TextureManager()
 {
 	this->countStreamingAssets();
-	this->pool = new ThreadPool("TexPool", 5);
+	this->pool = new ThreadPool("TexPool", 2);
 	this->pool->startScheduler();
 }
 
@@ -129,10 +129,15 @@ int TextureManager::getNumLoadedStreamTextures() const
 	return this->streamTextureList.size();
 }
 
+int TextureManager::getNumTotalStreamTextures() const
+{
+	return this->streamingAssetCount;
+}
+
 void TextureManager::countStreamingAssets()
 {
 	this->streamingAssetCount = 0;
-	for (const auto& entry : std::filesystem::directory_iterator(STREAMING_PATH)) {
+	for (const auto& entry : std::filesystem::directory_iterator(DATA_PATH)) {
 		this->streamingAssetCount++;
 	}
 	std::cout << "[TextureManager] Number of streaming assets: " << this->streamingAssetCount << std::endl;

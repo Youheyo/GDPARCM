@@ -5,7 +5,7 @@
 class ImageViewer : public AGameObject, public IExecutionEvent{
 
 public:
-    ImageViewer();
+    ImageViewer(bool *loadFinish);
     ~ImageViewer();
 
     void initialize() override;
@@ -20,8 +20,14 @@ public:
 private:
 
     bool started = false;
+    bool loadFinish;
 
     int index = 0;
     std::vector<sf::Texture*> ImgGallery;
+
+    sf::IntRect spriteRect;
+
+    int cropX = 0; 
+    int cropY = 0;
 
 };
