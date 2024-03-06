@@ -73,6 +73,18 @@
 		"xtree": "cpp",
 		"xutility": "cpp",
 		"functional": "cpp",
-		"semaphore": "cpp"
+		"semaphore": "cpp",
+		"condition_variable": "cpp",
+		"*.tcc": "cpp",
+		"codecvt": "cpp",
+		"cstdarg": "cpp",
+		"cwctype": "cpp",
+		"memory_resource": "cpp",
+		"numeric": "cpp",
+		"string_view": "cpp",
+		"mutex": "cpp",
+		"numbers": "cpp",
+		"cinttypes": "cpp",
+		"set": "cpp"
 	}
 }

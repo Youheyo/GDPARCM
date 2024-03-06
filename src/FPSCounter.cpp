@@ -34,6 +34,8 @@ void FPSCounter::processInput(sf::Event event)
 
 void FPSCounter::update(sf::Time deltaTime)
 {
+	updateTime += deltaTime;
+	framesPassed++;
 	this->updateFPS(deltaTime);
 }
 
@@ -47,6 +49,20 @@ void FPSCounter::draw(sf::RenderWindow* targetWindow)
 
 void FPSCounter::updateFPS(sf::Time elapsedTime)
 {
-	int fps = 1.0f / elapsedTime.asSeconds();
-	this->statsText->setString("FPS: " + to_string(fps));
+
+	// int fps = 1.0f / elapsedTime.asSeconds();
+
+	if(updateTime.asSeconds() > 0.5f){
+		fps = updateTime.asSeconds() * framesPassed;
+
+		displayCounter = !displayCounter;
+		if(displayCounter)
+		this->statsText->setString("FPS: " + to_string(fps));
+		else
+		this->statsText->setString("");
+
+		updateTime = updateTime.Zero;
+		framesPassed = 0;
+	}
+
 }

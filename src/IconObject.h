@@ -8,6 +8,8 @@ public:
 	void processInput(sf::Event event);
 	void update(sf::Time deltaTime);
 
+	bool getFromStream = true;
+
 private:
 	int textureIndex = 0;
 };

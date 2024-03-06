@@ -1,6 +1,7 @@
 #pragma once
 #include "AGameObject.h"
 #include "IExecutionEvent.h"
+#include "IconObject.h"
 
 class ImageViewer : public AGameObject, public IExecutionEvent{
 
@@ -14,16 +15,19 @@ public:
 
     void onFinishedExecution() override;
 
-    void addTexture(sf::Texture image);
-
-
 private:
 
     bool started = false;
-    bool loadFinish;
+    bool* loadFinish;
 
     int index = 0;
-    std::vector<sf::Texture*> ImgGallery;
+
+    float ticks;
+    bool reverse = false;
+    bool speedFlag = false;
+    float speed_multiplier = 1.0f; 
+
+    std::vector<IconObject*> ImgGallery;
 
     sf::IntRect spriteRect;
 

@@ -25,12 +25,12 @@ BaseRunner::BaseRunner() :
 	
 	// IconSpawner* iSpawn = new IconSpawner();
 	// GameObjectManager::getInstance()->addObject(iSpawn);
+	ImageViewer* viewer = new ImageViewer(&loadingScreenFinished);
+	GameObjectManager::getInstance()->addObject(viewer);
 
 	LoadingScreen* ls = new LoadingScreen(&loadingScreenFinished);
 	GameObjectManager::getInstance()->addObject(ls);
 
-	ImageViewer* viewer = new ImageViewer(&loadingScreenFinished);
-	GameObjectManager::getInstance()->addObject(viewer);
 
 	
 	FPSCounter* fpsCounter = new FPSCounter();

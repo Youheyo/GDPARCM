@@ -17,6 +17,8 @@ public:
 	void processInput(sf::Event event) override;
 	void update(sf::Time deltaTime) override;
 
+	void deleteLoadingObjects();
+
 private:
 
 	MiniGameMode mode = rhythm;
@@ -25,7 +27,14 @@ private:
 
 	float currProg;
 
+	bool keyCheck;
+
+#pragma region Textures
+	sf::Texture* pawTex;
 	std::vector<IconObject*> pawList;
+
+	sf::Texture* fangTex;
+#pragma endregion
 
 #pragma region Rhythm minigame values
 
@@ -36,11 +45,11 @@ private:
 	float time_check = 0.0f;
 
 
-	int maxCount = 10;
-	int count = 0;
-	int good = 0;
+	int maxCount = 10;	// * Max rhyhtm game nodes
+	int count = 0;		// * Used to count Rhythm Game progress. Counts paw amount spawned if mash mode
+	int good = 0;		// * Tracks correctly timed presses
 
-	int score = 0;
+	int score = 0;		// * Increments when good == maxCount
 	bool goodFlag = false;
 
 #pragma endregion

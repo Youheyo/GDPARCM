@@ -3,6 +3,8 @@
 #include "SFML/Graphics.hpp"
 #include "IconSpawner.h"
 #include "ThreadPool.h"
+#include <condition_variable>
+#include <mutex>
 
 class TextureManager
 {
@@ -11,6 +13,9 @@ public:
 	typedef std::vector<sf::Texture*> TextureList;
 	typedef std::unordered_map<String, TextureList> HashTable;
 	
+	std::condition_variable loadScreen, texLoad;
+	std::mutex mutex;
+
 public:
 	static TextureManager* getInstance();
 	void loadFromAssetList(); //loading of all assets needed for startup

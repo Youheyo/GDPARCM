@@ -10,10 +10,19 @@ IconObject::IconObject(String name, int textureIndex): AGameObject(name)
 
 void IconObject::initialize()
 {
+
 	//assign texture
 	this->sprite = new sf::Sprite();
-	// sf::Texture* texture = TextureManager::getInstance()->getStreamTextureFromList(this->textureIndex);
-	// this->sprite->setTexture(*texture);
+	sf::Texture* texture;
+
+	if(getFromStream){
+		texture = TextureManager::getInstance()->getStreamTextureFromList(this->textureIndex);
+	}
+	else{
+		texture = TextureManager::getInstance()->getBaseTextureFromList(this->textureIndex);
+	}
+
+	this->sprite->setTexture(*texture);
 }
 
 void IconObject::processInput(sf::Event event)

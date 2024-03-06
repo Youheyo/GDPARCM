@@ -53,6 +53,7 @@ void GameObjectManager::draw(sf::RenderWindow* window) {
 	for (int i = 0; i < this->gameObjectList.size(); i++) {
 		this->gameObjectList[i]->draw(window);
 	}
+	gameObjectMap["FPSCounter"]->draw(window);
 }
 
 void GameObjectManager::addObject(AGameObject* gameObject)
