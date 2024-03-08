@@ -12,9 +12,16 @@ public:
 	BaseRunner();
 	void run();
 
+
 private:
 	
 	bool loadingScreenFinished = false;
+	bool transition = false;
+	int fadeDir = 1;
+	bool startTransition = false;
+	float transitionAlphaVal = 0;
+
+	sf::RectangleShape* fadeRect;
 
 	sf::RenderWindow		window;
 

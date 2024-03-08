@@ -37,17 +37,21 @@ void IconLoader::onStartTask()
 	this->run();
 }
 
+void IconLoader::setSemaphore(std::counting_semaphore<10> *semaphore)
+{
+	this->sem = semaphore;
+}
+
 void IconLoader::run()
 {
 
+	this->sem->acquire();
 	IETThread::sleep(5000);
 
 	std::vector<String> tokens = StringUtils::split(path, '/');
 	String assetName = StringUtils::split(tokens[tokens.size() - 1], '.')[0];
 
-	TextureManager::getInstance()->mutex.lock();
 	TextureManager::getInstance()->instantiateAsTexture(path, assetName, isStreaming);
-	TextureManager::getInstance()->mutex.unlock();
 
 	std::cout << "[TextureManager] Loaded streaming texture: " << assetName << std::endl;
 
@@ -55,6 +59,7 @@ void IconLoader::run()
 	this->event->onFinishedExecution();
 	TextureManager::getInstance()->mutex.unlock();
 
+	this->sem->release();
 	delete this;
 
 }

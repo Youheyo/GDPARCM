@@ -29,16 +29,16 @@ void BGObject::processInput(sf::Event event)
 void BGObject::update(sf::Time deltaTime)
 {
 	//make BG scroll slowly
-	sf::Vector2f position = this->getPosition();
-	position.y += this->SPEED_MULTIPLIER * deltaTime.asSeconds();
-	this->setPosition(position.x, position.y);
+	// sf::Vector2f position = this->getPosition();
+	// position.y += this->SPEED_MULTIPLIER * deltaTime.asSeconds();
+	// this->setPosition(position.x, position.y);
 
-	sf::Vector2f localPos = this->sprite->getPosition();
-	if (localPos.y * deltaTime.asSeconds() > 0) {
-		//reset position
-		this->setPosition(0, -BaseRunner::WINDOW_HEIGHT * 7);
-	}
-	else {
+	// sf::Vector2f localPos = this->sprite->getPosition();
+	// if (localPos.y * deltaTime.asSeconds() > 0) {
+	// 	//reset position
+	// 	this->setPosition(0, -BaseRunner::WINDOW_HEIGHT * 7);
+	// }
+	// else {
 		
-	}
+	// }
 }

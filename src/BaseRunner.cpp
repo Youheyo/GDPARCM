@@ -7,6 +7,7 @@
 #include "IconObject.h"
 #include "ImageViewer.h"
 #include "LoadingScreen.h"
+#include "ProgressTrack.h"
 
 /// <summary>
 /// This demonstrates a running parallax background where after X seconds, a batch of assets will be streamed and loaded.
@@ -25,16 +26,25 @@ BaseRunner::BaseRunner() :
 	
 	// IconSpawner* iSpawn = new IconSpawner();
 	// GameObjectManager::getInstance()->addObject(iSpawn);
+	
 	ImageViewer* viewer = new ImageViewer(&loadingScreenFinished);
 	GameObjectManager::getInstance()->addObject(viewer);
 
 	LoadingScreen* ls = new LoadingScreen(&loadingScreenFinished);
 	GameObjectManager::getInstance()->addObject(ls);
 
+	// * Loadscreen transition set up
+	this->fadeRect = new sf::RectangleShape(sf::Vector2f(BaseRunner::WINDOW_WIDTH, BaseRunner::WINDOW_HEIGHT));
+	this->fadeRect->setFillColor(sf::Color::White);
+	fadeRect->setPosition(0,0);
 
 	
 	FPSCounter* fpsCounter = new FPSCounter();
 	GameObjectManager::getInstance()->addObject(fpsCounter);
+
+	ProgressTrack* tracker = new ProgressTrack();
+	GameObjectManager::getInstance()->addObject(tracker);
+
 }
 
 void BaseRunner::run() {
@@ -67,17 +77,49 @@ void BaseRunner::processEvents()
 		case sf::Event::Closed:
 			this->window.close();
 			break;
-
 		}
 	}
+
+	// * Start the transition when loading is finished
+	if(loadingScreenFinished && !startTransition){
+		startTransition = true;
+		transition = true;
+	}
+
 }
 
 void BaseRunner::update(sf::Time elapsedTime) {
 	GameObjectManager::getInstance()->update(elapsedTime);
+
+	// * Fades in to a white screen then fades out
+	if(transition){
+
+   		transitionAlphaVal += elapsedTime.asSeconds() * fadeDir * 255;
+
+		// * When Alpha reaches peak, initiate transition actions and fade out
+		if(transitionAlphaVal >= 255){
+			fadeDir *= -1;
+			static_cast<ImageViewer*>(GameObjectManager::getInstance()->findObjectByName("ImageViewer"))->TransitionAction();
+			static_cast<LoadingScreen*>(GameObjectManager::getInstance()->findObjectByName("LoadingScreen"))->TransitionAction();
+			GameObjectManager::getInstance()->deleteObjectByName("ProgressTrack");
+
+		}
+
+		fadeRect->setFillColor(sf::Color(255,255,255, transitionAlphaVal));
+
+		if(transitionAlphaVal < 0){
+			transition = false;	
+		}
+	}
 }
 
 void BaseRunner::render() {
 	this->window.clear();
 	GameObjectManager::getInstance()->draw(&this->window);
+
+	// * Draw Transition Last to be drawn over the rest
+	if(transition){
+		this->window.draw(*fadeRect);
+	}
 	this->window.display();
 }

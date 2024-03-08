@@ -3,6 +3,7 @@
 #include "IETThread.h"
 #include "IExecutionEvent.h"
 #include "IWorkerAction.h"
+#include <semaphore>
 
 class IconLoader :    public IETThread, public IWorkerAction
 {
@@ -15,6 +16,7 @@ public:
 	void setPath(String path);
 	void setStreaming(bool stream);
 	void onStartTask() override;
+	void setSemaphore(std::counting_semaphore<10>* semaphore);
 
 	bool isRunning = false;
 
@@ -26,6 +28,8 @@ private:
 	bool isStreaming = true;
 
 	IExecutionEvent* event;
+
+	std::counting_semaphore<10>* sem;
 
 };
 

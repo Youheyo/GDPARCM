@@ -3,8 +3,8 @@
 #include "AGameObject.h"
 #include <vector>
 #include "IconObject.h"
-
-class LoadingScreen : public AGameObject{
+#include "ITransitionEvent.h"
+class LoadingScreen : public AGameObject, public ITransitionEvent {
 
 public:
 
@@ -17,7 +17,11 @@ public:
 	void processInput(sf::Event event) override;
 	void update(sf::Time deltaTime) override;
 
+	void TransitionAction() override;
+
 	void deleteLoadingObjects();
+
+	float checkProgress();
 
 private:
 
@@ -25,7 +29,9 @@ private:
 
 	bool* finishState = nullptr;
 
-	float currProg;
+	float currProg = 0;
+	float totalLoad = 0;
+	float loadProgress = 0;
 
 	bool keyCheck;
 
@@ -34,12 +40,15 @@ private:
 	std::vector<IconObject*> pawList;
 
 	sf::Texture* fangTex;
+	std::vector<IconObject*> fangList;
 #pragma endregion
 
-#pragma region Rhythm minigame values
+#pragma region Rhythm Minigame 
 
-	float interval = 5.0f;
-	float ok_range = 0.5f;
+	void spawnPaw();
+
+	float interval = 0.5f;
+	float ok_range = 1.5f;
 
 	float ticks = 0.0f;
 	float time_check = 0.0f;

@@ -8,6 +8,9 @@
 #include "IconLoader.h"
 #include "BaseRunner.h"
 #include "ThreadPool.h"
+#include <semaphore>
+
+std::counting_semaphore<10> texSem(10);
 
 //a singleton class
 TextureManager* TextureManager::sharedInstance = NULL;
@@ -24,7 +27,7 @@ TextureManager* TextureManager::getInstance() {
 TextureManager::TextureManager()
 {
 	this->countStreamingAssets();
-	this->pool = new ThreadPool("TexPool", 2);
+	this->pool = new ThreadPool("TexPool", 5);
 	this->pool->startScheduler();
 }
 
@@ -87,6 +90,7 @@ void TextureManager::loadAssetsFromDirectory(IExecutionEvent* event)
 		String path = entry.path().generic_string();
 
 		IconLoader* il = new IconLoader(path, event);
+		il->setSemaphore(&texSem);
 		this->pool->scheduleTask(il);
 		
 	}

@@ -12,8 +12,7 @@ public:
 	typedef std::string String;
 	typedef std::vector<sf::Texture*> TextureList;
 	typedef std::unordered_map<String, TextureList> HashTable;
-	
-	std::condition_variable loadScreen, texLoad;
+
 	std::mutex mutex;
 
 public:

@@ -2,8 +2,9 @@
 #include "AGameObject.h"
 #include "IExecutionEvent.h"
 #include "IconObject.h"
+#include "ITransitionEvent.h"
 
-class ImageViewer : public AGameObject, public IExecutionEvent{
+class ImageViewer : public AGameObject, public IExecutionEvent, public ITransitionEvent{
 
 public:
     ImageViewer(bool *loadFinish);
@@ -14,13 +15,16 @@ public:
     void update(sf::Time deltaTime) override;
 
     void onFinishedExecution() override;
+    void TransitionAction() override;
 
 private:
+
+    bool ScrollGallery = false;
 
     bool started = false;
     bool* loadFinish;
 
-    int index = 0;
+    int normalize = 2;
 
     float ticks;
     bool reverse = false;
@@ -28,10 +32,5 @@ private:
     float speed_multiplier = 1.0f; 
 
     std::vector<IconObject*> ImgGallery;
-
-    sf::IntRect spriteRect;
-
-    int cropX = 0; 
-    int cropY = 0;
 
 };

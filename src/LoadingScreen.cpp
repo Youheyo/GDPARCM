@@ -11,7 +11,7 @@ LoadingScreen::LoadingScreen(bool *finishState) : AGameObject("LoadingScreen"){
 }
 
 LoadingScreen::~LoadingScreen() {
-    
+    AGameObject::~AGameObject();
 }
 
 void LoadingScreen::initialize() {
@@ -27,6 +27,14 @@ void LoadingScreen::initialize() {
 
 	fangTex = tm->getFromTextureMap("Fang",0);
 
+	if(mode == MiniGameMode::rhythm){
+		IconObject* fangObj = new IconObject("Fang1", 0);
+		fangObj->getFromStream = false;
+		fangList.push_back(fangObj);
+		GameObjectManager::getInstance()->addObject(fangObj);
+		fangObj->getSprite()->setTexture(*fangTex);
+		fangObj->setPosition(9999,9999);
+	}
 	// * PreLoad all paw objects
 	for (int i = 0; i < maxCount; i++)
 	{
@@ -42,19 +50,19 @@ void LoadingScreen::initialize() {
 		else
 		icon->getSprite()->setTextureRect(sf::IntRect(pawTex->getSize().x / 2,0, pawTex->getSize().x / 2, pawTex->getSize().y));
 		icon->getSprite()->setRotation(90);
-		icon->setScale(0.5,0.5);
+		icon->setScale(0.2,0.2);
+		icon->setPosition(9999,9999);
 		this->pawList.push_back(icon);
 
 	}
 	tm->mutex.unlock();
 
+	this->totalLoad = tm->getNumTotalStreamTextures();
 }
 
 void LoadingScreen::processInput(sf::Event Event) {
 
-	// * Rhythm Button
-
-    if(Event.type == sf::Event::KeyPressed && Event.key.code == sf::Keyboard::Space){
+    if(Event.type == sf::Event::KeyPressed && Event.key.code == sf::Keyboard::Space && !*this->finishState){
 
 		if(keyCheck) return;
 		switch (mode)
@@ -72,21 +80,25 @@ void LoadingScreen::processInput(sf::Event Event) {
 			{
 				TextureManager::getInstance()->mutex.lock();
 
+#pragma region Randomization
 				std::random_device rd; 
 				std::mt19937 gen(rd());
 
 				std::uniform_int_distribution<int> wBorder(0, BaseRunner::WINDOW_WIDTH);
 				std::uniform_int_distribution<int> hBorder(0, BaseRunner::WINDOW_HEIGHT);
 				std::uniform_int_distribution<int> rollBounds(0, 100);
-
+#pragma endregion
+				
 				int roll = rollBounds(gen);
+
 				if(roll < 5 ){ 		// * Place a fang
 					IconObject* fang = new IconObject("Fang" + std::to_string(score),0);
 					fang->getFromStream = false;
+					fangList.push_back(fang);
 					GameObjectManager::getInstance()->addObject(fang);
-					fang->getSprite()->setScale(0.5, 0.5);
 					fang->getSprite()->setTexture(*fangTex);
 					fang->getSprite()->setRotation(rand());
+					fang->setScale(0.5f,0.5f);
 					fang->setPosition(wBorder(gen), hBorder(gen));
 					score++;
 
@@ -108,7 +120,7 @@ void LoadingScreen::processInput(sf::Event Event) {
 						else{
 							icon->getSprite()->setTextureRect(sf::IntRect(pawTex->getSize().x / 2,0, pawTex->getSize().x / 2, pawTex->getSize().y));
 						}
-						icon->setScale(0.5,0.5);
+						icon->setScale(0.2,0.2);
 						this->pawList.push_back(icon);
 					}
 					this->pawList[count]->getSprite()->setRotation(rand());
@@ -134,28 +146,33 @@ void LoadingScreen::update(sf::Time deltaTime) {
     
 	TextureManager* tm = TextureManager::getInstance();
 
-	currProg = tm->getNumLoadedStreamTextures() / tm->getNumTotalStreamTextures();
-
-	ticks += deltaTime.asMicroseconds();
-
-
-	// * Delete all loading screen objects when assets are all loaded
-	if(*finishState == true){
-		deleteLoadingObjects();
+	if(tm->getNumLoadedStreamTextures() > currProg){
+  		currProg = tm->getNumLoadedStreamTextures();
 	}
 
+	ticks += deltaTime.asSeconds();
 
 #pragma region Rhythm Mode
 
 	// * Increments count for interactive loading screen
-	if(ticks > interval && mode == rhythm){
+	if(ticks > interval && mode == rhythm && !this->finishState){
+
+		// * Hide all 
+		if(count >= maxCount){
+			for(int i = 0; i < pawList.size(); i++){
+				pawList[i]->setPosition(9999, 9999);
+				pawList[i]->setScale(0.5, 0.5);
+			}
+			fangList[0]->setPosition(9999,9999);
+
+			count = 0;
+		}
 
 		ticks = 0;
 		count++;
 
 		if( count >= maxCount){ // * Count reaches max
 
-			count = 0;
 
 			if(good >= maxCount){ // * Add Score When all good
 				// * Reward
@@ -165,8 +182,11 @@ void LoadingScreen::update(sf::Time deltaTime) {
 		}
 
 		// * Spawn Sprite
-
-		this->sprite;
+		if(goodFlag && good >= maxCount){
+			fangList[0]->setPosition(BaseRunner::WINDOW_WIDTH - 64, BaseRunner::WINDOW_HEIGHT - 64);
+		}else{
+			spawnPaw();
+		}
 
 		goodFlag = false;
 	}
@@ -175,30 +195,43 @@ void LoadingScreen::update(sf::Time deltaTime) {
 
 }
 
+void LoadingScreen::TransitionAction()
+{
+	deleteLoadingObjects();
+}
 
 // * Deletes all the assets of loading screen. Then delete itself
 void LoadingScreen::deleteLoadingObjects()
 {
 
-	// TODO Something to make the transition for assets
-
 	GameObjectManager* gm = GameObjectManager::getInstance();
 
-	int pawCount;
-
-	if(mode == MiniGameMode::mash){
-		pawCount = count + 10;
+	for(int i = 0; i < pawList.size(); i++){
+		gm->deleteObject(pawList[i]);
 	}
-	else{
-		pawCount = maxCount;
-	}
-
-	for(int i = 0; i < pawCount; i++ ){
-		gm->deleteObjectByName("Paw"+ std::to_string(i));
-	}
-	for(int i = 0; i < score; i++ ){
-		gm->deleteObjectByName("Fang"+ std::to_string(i));
+	for(int i = 0; i < fangList.size(); i++){
+		gm->deleteObject(fangList[i]);
 	}
 
 	GameObjectManager::getInstance()->deleteObject(this);
+}
+
+float LoadingScreen::checkProgress()
+{
+    return currProg / totalLoad;
+}
+
+void LoadingScreen::spawnPaw()
+{
+	float heightMod = 1;
+	if(count % 2 == 1) heightMod = 2;
+
+	pawList[count]->setPosition(
+		128 + 128 * count,
+		BaseRunner::WINDOW_HEIGHT - 256 / heightMod
+	);
+
+	if(goodFlag){
+		pawList[count]->setScale(0.5,0.5);
+	}
 }
