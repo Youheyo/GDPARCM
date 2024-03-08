@@ -8,8 +8,6 @@ class LoadingScreen : public AGameObject, public ITransitionEvent {
 
 public:
 
-	enum MiniGameMode{ rhythm, mash};
-
 	LoadingScreen(bool *finishState);
 	~LoadingScreen();
 
@@ -24,8 +22,6 @@ public:
 	float checkProgress();
 
 private:
-
-	MiniGameMode mode = rhythm;
 
 	bool* finishState = nullptr;
 
@@ -43,24 +39,11 @@ private:
 	std::vector<IconObject*> fangList;
 #pragma endregion
 
-#pragma region Rhythm Minigame 
-
-	void spawnPaw();
-
-	float interval = 0.5f;
-	float ok_range = 1.5f;
-
 	float ticks = 0.0f;
-	float time_check = 0.0f;
 
-
-	int maxCount = 10;	// * Max rhyhtm game nodes
 	int count = 0;		// * Used to count Rhythm Game progress. Counts paw amount spawned if mash mode
-	int good = 0;		// * Tracks correctly timed presses
 
 	int score = 0;		// * Increments when good == maxCount
-	bool goodFlag = false;
 
-#pragma endregion
-
+	void spawnPaw();
 };
