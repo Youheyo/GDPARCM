@@ -53,7 +53,7 @@ void FPSCounter::updateFPS(sf::Time elapsedTime)
 	updateTime += elapsedTime;
 	framesPassed++;
 
-	if(updateTime > sf::seconds(0.5)){
+	if(updateTime.asSeconds() > 0.5f){
 
 		fps = updateTime.asSeconds() * framesPassed;
 

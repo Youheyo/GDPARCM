@@ -94,7 +94,6 @@ void BaseRunner::update(sf::Time elapsedTime) {
 	// * Fades in to a white screen then fades out
 	if(transition){
 
-   		transitionAlphaVal += elapsedTime.asSeconds() * fadeDir * 255;
 
 		// * When Alpha reaches peak, initiate transition actions and fade out
 		if(transitionAlphaVal >= 255){
@@ -104,6 +103,8 @@ void BaseRunner::update(sf::Time elapsedTime) {
 			GameObjectManager::getInstance()->deleteObjectByName("ProgressTrack");
 
 		}
+
+   		transitionAlphaVal += elapsedTime.asSeconds() * fadeDir * 255 * 2;
 
 		fadeRect->setFillColor(sf::Color(255,255,255, transitionAlphaVal));
 
